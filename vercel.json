@@ -1,5 +1,0 @@
-{
-  "buildCommand": "bash build.sh",
-  "outputDirectory": "client/build",
-  "framework": "create-react-app"
-}
