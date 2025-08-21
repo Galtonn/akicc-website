@@ -1,4 +1,3 @@
 {
-  "buildCommand": "bash build.sh",
   "outputDirectory": "client/build"
 }
