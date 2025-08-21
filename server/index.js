@@ -392,7 +392,14 @@ app.get('/api/products', async (req, res) => {
         );
         
         const productData = mapProductFields(product);
-        productData.additionalImages = additionalImages.rows;
+        // Construct full image URLs
+        if (productData.image) {
+          productData.image = `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${productData.image}`;
+        }
+        productData.additionalImages = additionalImages.rows.map(img => ({
+          ...img,
+          imagePath: `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${img.imagepath}`
+        }));
         productData.categories = categories.rows.map(c => c.category);
         
         return productData;
@@ -426,7 +433,14 @@ app.get('/api/products/:id', async (req, res) => {
     );
 
     const productData = mapProductFields(product.rows[0]);
-    productData.additionalImages = additionalImages.rows;
+    // Construct full image URLs
+    if (productData.image) {
+      productData.image = `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${productData.image}`;
+    }
+    productData.additionalImages = additionalImages.rows.map(img => ({
+      ...img,
+      imagePath: `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${img.imagepath}`
+    }));
     productData.categories = categories.rows.map(c => c.category);
 
     res.json(productData);
