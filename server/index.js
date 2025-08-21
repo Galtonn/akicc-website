@@ -12,6 +12,11 @@ require('dotenv').config();
 
 console.log('EMAIL_USER:', process.env.EMAIL_USER);
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? '***' : 'undefined');
+console.log('PGHOST:', process.env.PGHOST);
+console.log('PGUSER:', process.env.PGUSER);
+console.log('PGDATABASE:', process.env.PGDATABASE);
+console.log('PGPORT:', process.env.PGPORT);
+console.log('NODE_ENV:', process.env.NODE_ENV);
 
 const app = express();
 const PORT = process.env.PORT || 5000;
