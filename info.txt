@@ -1,0 +1,19 @@
+make me a complete website with the following properties:
+
+1. Home page: this page has a navbar at the top of the page that contains the following: Home, products, contact/booking, about us, customer login/register. Under it
+is a banner that displays what AKICC is and shows a nice picture with words under it and a button that directs them to the products.
+This page also has three "sections" of hot products, new arrivals, and open box. In the admin panel, these types of products could be added/deleted conviniently.
+
+2. Products page: This page shows a catalog of products (each product has these properties: product name, brand name, model, serial number, a brief description, and a picture).
+All of the products are displayed in orderly fashion showing just some basic info and all of the info would be shown once you click on one of the products.
+There is also a search bar exclusively for the products page that allows you find a product via product name. You can also add products to "my list" and
+inside "my list" you can also remove products. In the "my list" you can also press a button called "send list" that sends their list of products to all admin accounts
+(there are two types of accounts when registering: dealer and end user). The products also have different prices for dealers and end users and admins have access to
+both prices. Admins have a record of all "my list" sent to them. Admins manage all of this in some sort of admin panel.
+
+3. Contact page: This page allows you to send emails to an admin email directly on the website. There are two types of emails that could be sent: booking emails
+and general inquiry emails. General inquiries are just sent to the admin email. Booking emails are sent to the admin email as well as all of its contents are saved
+to the database where admins will be able to have a record of. Booking emails ask for email, phone number, company name, name of sender, and what they are booking about.
+General inquiry emails ask for name, email, topic of question, and description of question.
+
+4. About us: Basically a page that has some pictures and explain what AKICC is about (company that sells printers and printer parts as well as printer maintenece/fixing services.)
