@@ -493,9 +493,9 @@ app.post('/api/products', authenticateToken, uploadMultiple.array('images', 10),
 
       // Insert the main product
       const result = await client.query(
-        `INSERT INTO products (name, brand, series, model, serialNumber, description, image, dealerPrice, endUserPrice, warranty, type)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`,
-        [series || name, brand, series || null, model || null, serialNumber || null, description || null, mainImage, dealerPrice || null, endUserPrice || null, warranty || null, type || null]
+        `INSERT INTO products (name, brand, series, model, serialNumber, description, image, dealerPrice, endUserPrice, category, warranty, type)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
+        [series || name, brand, series || null, model || null, serialNumber || null, description || null, mainImage, dealerPrice || null, endUserPrice || null, categories && categories.length > 0 ? categories[0] : 'General', warranty || null, type || null]
       );
       const productId = result.rows[0].id;
 
@@ -596,8 +596,8 @@ app.put('/api/products/:id', authenticateToken, uploadMultiple.array('images', 1
       // Update the main product (without changing the main image)
       const result = await client.query(
         `UPDATE products SET name = $1, brand = $2, series = $3, model = $4, serialNumber = $5, description = $6, 
-         dealerPrice = $7, endUserPrice = $8, warranty = $9, type = $10 WHERE id = $11`,
-        [series || name, brand, series || null, model || null, serialNumber || null, description || null, dealerPrice || null, endUserPrice || null, warranty || null, type || null, req.params.id]
+         dealerPrice = $7, endUserPrice = $8, category = $9, warranty = $10, type = $11 WHERE id = $12`,
+        [series || name, brand, series || null, model || null, serialNumber || null, description || null, dealerPrice || null, endUserPrice || null, categories && categories.length > 0 ? categories[0] : 'General', warranty || null, type || null, req.params.id]
       );
 
       if (result.rowCount === 0) {
