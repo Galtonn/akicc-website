@@ -4,6 +4,8 @@ import { useProduct } from '../contexts/ProductContext';
 import { useAuth } from '../contexts/AuthContext';
 import { FaSearch, FaHeart, FaEye } from 'react-icons/fa';
 
+// Enhanced image rendering with debugging and line ending fixes
+
 export const ProductCard = ({ product }) => {
   const { addToMyList, removeFromMyList, myList, myListLoading } = useProduct();
   const { user } = useAuth();
@@ -73,9 +75,13 @@ export const ProductCard = ({ product }) => {
           style={{ imageRendering: 'high-quality' }}
           loading="lazy"
           onError={e => {
+            console.log('Image failed to load:', e.target.src);
             if (!e.target.src.endsWith('/placeholder-printer.jpg')) {
               e.target.src = '/placeholder-printer.jpg';
             }
+          }}
+          onLoad={() => {
+            console.log('Image loaded successfully:', product.image);
           }}
         />
 
