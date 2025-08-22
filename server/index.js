@@ -66,6 +66,15 @@ const pool = new Pool({
     await pool.query('ALTER TABLE products ADD COLUMN IF NOT EXISTS warranty TEXT');
     await pool.query('ALTER TABLE products ADD COLUMN IF NOT EXISTS type TEXT');
     
+    // Fix product_images table column name if needed
+    try {
+      await pool.query('ALTER TABLE product_images RENAME COLUMN imagepath TO imagePath');
+      console.log('Renamed imagepath to imagePath in product_images table');
+    } catch (error) {
+      // Column might already be named correctly or not exist
+      console.log('imagePath column already exists or rename failed:', error.message);
+    }
+    
     // Update existing products to have series field (extract from name)
     await pool.query(`
       UPDATE products 
@@ -437,10 +446,23 @@ app.get('/api/products/:id', async (req, res) => {
     if (productData.image) {
       productData.image = `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${productData.image}`;
     }
-    productData.additionalImages = additionalImages.rows.map(img => ({
-      ...img,
-      imagePath: `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${img.imagePath}`
-    }));
+    productData.additionalImages = additionalImages.rows.map(img => {
+      // Handle both old and new database formats
+      const imagePath = img.imagePath || img.imagepath;
+      const fullImagePath = `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${imagePath}`;
+      console.log('Constructing image URL:', { 
+        original: imagePath, 
+        full: fullImagePath, 
+        NODE_ENV: process.env.NODE_ENV,
+        imgKeys: Object.keys(img),
+        imgImagePath: img.imagePath,
+        imgImagepath: img.imagepath
+      });
+      return {
+        ...img,
+        imagePath: fullImagePath
+      };
+    });
     productData.categories = categories.rows.map(c => c.category);
 
     res.json(productData);
