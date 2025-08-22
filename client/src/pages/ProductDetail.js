@@ -40,7 +40,7 @@ const ProductDetail = () => {
         if (response.data.additionalImages && response.data.additionalImages.length > 0) {
           response.data.additionalImages.forEach(img => {
             const imagePath = img.imagePath;
-            if (imagePath && imagePath !== response.data.image) {
+            if (imagePath) {
               images.push(imagePath);
             }
           });
