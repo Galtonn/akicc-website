@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaChevronLeft, FaChevronRight, FaTimes } from 'react-icons/fa';
 
 const ImageGallery = ({ images, productName }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
+  const [imageErrors, setImageErrors] = useState(new Set());
 
-  // Combine main image with additional images
-  const allImages = images || [];
+  // Combine main image with additional images and filter out failed images
+  const allImages = (images || []).filter((_, index) => !imageErrors.has(index));
+  
+  // Reset image errors when images change
+  useEffect(() => {
+    setImageErrors(new Set());
+    setCurrentImageIndex(0);
+  }, [images]);
   
   if (allImages.length === 0) {
     return (
@@ -32,6 +39,7 @@ const ImageGallery = ({ images, productName }) => {
           style={{ cursor: 'pointer' }}
           onError={(e) => {
             e.target.src = '/placeholder-printer.jpg';
+            setImageErrors(prev => new Set([...prev, 0]));
           }}
         />
         
@@ -89,6 +97,7 @@ const ImageGallery = ({ images, productName }) => {
             style={{ cursor: 'pointer' }}
             onError={(e) => {
               e.target.src = '/placeholder-printer.jpg';
+              setImageErrors(prev => new Set([...prev, currentImageIndex]));
             }}
           />
           
@@ -134,6 +143,7 @@ const ImageGallery = ({ images, productName }) => {
                      alt={`Thumbnail ${index + 1}`}
                      onError={(e) => {
                        e.target.src = '/placeholder-printer.jpg';
+                       setImageErrors(prev => new Set([...prev, index]));
                      }}
                    />
                 </button>

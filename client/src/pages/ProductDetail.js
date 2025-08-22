@@ -13,6 +13,7 @@ const ProductDetail = () => {
   const { addToMyList, removeFromMyList, myList } = useProduct();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [imageArray, setImageArray] = useState([]);
 
   // Function to format category display
   const formatCategory = (category) => {
@@ -30,6 +31,21 @@ const ProductDetail = () => {
         setLoading(true);
         const response = await axios.get(`${apiConfig.baseURL}/api/products/${id}`);
         setProduct(response.data);
+        
+        // Build stable image array
+        const images = [];
+        if (response.data.image) {
+          images.push(response.data.image);
+        }
+        if (response.data.additionalImages && response.data.additionalImages.length > 0) {
+          response.data.additionalImages.forEach(img => {
+            const imagePath = img.imagePath;
+            if (imagePath && imagePath !== response.data.image) {
+              images.push(imagePath);
+            }
+          });
+        }
+        setImageArray(images);
       } catch (error) {
         setError('Product not found');
       } finally {
@@ -95,21 +111,7 @@ const ProductDetail = () => {
           {/* Product Image */}
           <div className="product-detail-image-card">
             <ImageGallery 
-              images={(() => {
-                const images = [];
-                if (product.image) {
-                  images.push(product.image);
-                }
-                if (product.additionalImages && product.additionalImages.length > 0) {
-                  product.additionalImages.forEach(img => {
-                    const imagePath = img.imagepath || img.imagePath;
-                    if (imagePath && imagePath !== product.image) {
-                      images.push(imagePath);
-                    }
-                  });
-                }
-                return images;
-              })()}
+              images={imageArray}
               productName={product.name}
             />
           </div>
