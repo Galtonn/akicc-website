@@ -177,6 +177,12 @@ const Products = () => {
     }
   };
 
+  // Predefined categories that should always be available in the filter
+  const predefinedCategories = ['hot', 'new', 'openbox', 'parts'];
+  
+  // Combine predefined categories with categories from database
+  const allAvailableCategories = [...new Set([...predefinedCategories, ...categories])];
+
   // Function to format product type display names
   const formatTypeDisplay = (type) => {
     if (!type) return '';
@@ -319,7 +325,7 @@ const Products = () => {
                 className="form-select"
               >
                 <option value="">All Categories</option>
-                {categories.map((category) => (
+                {allAvailableCategories.map((category) => (
                   <option key={category} value={category}>
                     {formatCategoryDisplay(category)}
                   </option>
