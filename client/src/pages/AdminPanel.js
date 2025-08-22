@@ -828,7 +828,7 @@ const AdminPanel = () => {
                         {existingImages.map((img, index) => (
                           <div key={img.id} className="relative group">
                             <img
-                              src={img.imagepath}
+                              src={img.imagePath}
                               alt={`Existing image ${index + 1}`}
                               className="w-16 h-16 object-cover rounded border"
                               onError={(e) => {
@@ -861,7 +861,7 @@ const AdminPanel = () => {
                                 if (confirm('Set this image as the main product image?')) {
                                   try {
                                     await axios.put(`${apiConfig.baseURL}/api/products/${editingProduct.id}/main-image`, {
-                                      imagePath: img.imagepath || img.imagePath
+                                      imagePath: img.imagePath
                                     });
                                     toast.success('Main image updated successfully');
                                     // Refresh the product data
