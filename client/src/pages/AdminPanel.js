@@ -144,6 +144,8 @@ const AdminPanel = () => {
     // Fetch existing images for this product
     try {
               const response = await axios.get(`${apiConfig.baseURL}/api/products/${product.id}`);
+      console.log('Product data received:', response.data);
+      console.log('Additional images:', response.data.additionalImages);
       if (response.data.additionalImages) {
         setExistingImages(response.data.additionalImages);
       } else {
@@ -832,6 +834,7 @@ const AdminPanel = () => {
                               alt={`Existing image ${index + 1}`}
                               className="w-16 h-16 object-cover rounded border"
                               onError={(e) => {
+                                console.log('Image failed to load:', e.target.src);
                                 e.target.src = '/placeholder-printer.jpg';
                               }}
                             />
