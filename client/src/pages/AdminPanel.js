@@ -143,9 +143,14 @@ const AdminPanel = () => {
     
     // Fetch existing images for this product
     try {
-              const response = await axios.get(`${apiConfig.baseURL}/api/products/${product.id}`);
+      const response = await axios.get(`${apiConfig.baseURL}/api/products/${product.id}`);
       console.log('Product data received:', response.data);
       console.log('Additional images:', response.data.additionalImages);
+      
+      // Also fetch debug info
+      const debugResponse = await axios.get(`${apiConfig.baseURL}/api/debug/product-images/${product.id}`);
+      console.log('Debug info:', debugResponse.data);
+      
       if (response.data.additionalImages) {
         setExistingImages(response.data.additionalImages);
       } else {

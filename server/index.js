@@ -447,22 +447,32 @@ app.get('/api/products/:id', async (req, res) => {
       productData.image = `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${productData.image}`;
     }
     productData.additionalImages = additionalImages.rows.map(img => {
-      // Handle both old and new database formats
-      const imagePath = img.imagePath || img.imagepath;
+      // Handle both old and new database formats - try multiple possible property names
+      let imagePath = null;
+      if (img.imagePath) {
+        imagePath = img.imagePath;
+      } else if (img.imagepath) {
+        imagePath = img.imagepath;
+      } else if (img.image_path) {
+        imagePath = img.image_path;
+      } else {
+        // If no image path found, skip this image
+        console.log('No image path found for image:', img);
+        return null;
+      }
+      
       const fullImagePath = `${process.env.NODE_ENV === 'production' ? 'https://akicc-website-production.up.railway.app' : 'http://localhost:5000'}/uploads/${imagePath}`;
       console.log('Constructing image URL:', { 
         original: imagePath, 
         full: fullImagePath, 
         NODE_ENV: process.env.NODE_ENV,
-        imgKeys: Object.keys(img),
-        imgImagePath: img.imagePath,
-        imgImagepath: img.imagepath
+        imgKeys: Object.keys(img)
       });
       return {
         ...img,
         imagePath: fullImagePath
       };
-    });
+    }).filter(img => img !== null); // Remove any null entries
     productData.categories = categories.rows.map(c => c.category);
 
     res.json(productData);
@@ -746,6 +756,26 @@ app.delete('/api/products/:productId/images/:imageId', authenticateToken, async 
   } catch (err) {
     console.error('Failed to delete image:', err);
     res.status(500).json({ error: 'Failed to delete image', details: err.message });
+  }
+});
+
+// Debug endpoint to check database structure
+app.get('/api/debug/product-images/:productId', async (req, res) => {
+  try {
+    const additionalImages = await pool.query(
+      'SELECT * FROM product_images WHERE productId = $1 ORDER BY displayOrder',
+      [req.params.productId]
+    );
+    
+    res.json({
+      productId: req.params.productId,
+      images: additionalImages.rows,
+      imageCount: additionalImages.rows.length,
+      sampleImage: additionalImages.rows[0] || null
+    });
+  } catch (err) {
+    console.error('Debug endpoint error:', err);
+    res.status(500).json({ error: 'Debug endpoint failed' });
   }
 });
 
