@@ -25,7 +25,7 @@ const ImageGallery = ({ images, productName }) => {
     return (
       <div className="product-detail-image-wrapper">
         <img
-          src={`/uploads/${allImages[0]}`}
+          src={allImages[0]}
           alt={productName}
           className="product-detail-image"
           onClick={() => setShowModal(true)}
@@ -44,14 +44,14 @@ const ImageGallery = ({ images, productName }) => {
               </button>
               
               <div className="product-image-modal-gallery">
-                <img
-                  src={`/uploads/${allImages[0]}`}
-                  alt={productName}
-                  className="product-image-modal-image"
-                  onError={(e) => {
-                    e.target.src = '/placeholder-printer.jpg';
-                  }}
-                />
+                              <img
+                src={allImages[0]}
+                alt={productName}
+                className="product-image-modal-image"
+                onError={(e) => {
+                  e.target.src = '/placeholder-printer.jpg';
+                }}
+              />
               </div>
             </div>
           </div>
@@ -82,7 +82,7 @@ const ImageGallery = ({ images, productName }) => {
       <div className="product-detail-image-wrapper">
         <div className="product-image-gallery">
           <img
-            src={currentImage ? `/uploads/${currentImage}` : '/placeholder-printer.jpg'}
+            src={currentImage ? currentImage : '/placeholder-printer.jpg'}
             alt={`${productName} - Image ${currentImageIndex + 1}`}
             className="product-detail-image"
             onClick={openModal}
@@ -129,13 +129,13 @@ const ImageGallery = ({ images, productName }) => {
                   onClick={() => setCurrentImageIndex(index)}
                   aria-label={`Go to image ${index + 1}`}
                 >
-                  <img
-                    src={`/uploads/${image}`}
-                    alt={`Thumbnail ${index + 1}`}
-                    onError={(e) => {
-                      e.target.src = '/placeholder-printer.jpg';
-                    }}
-                  />
+                                     <img
+                     src={image}
+                     alt={`Thumbnail ${index + 1}`}
+                     onError={(e) => {
+                       e.target.src = '/placeholder-printer.jpg';
+                     }}
+                   />
                 </button>
               ))}
             </div>
@@ -153,7 +153,7 @@ const ImageGallery = ({ images, productName }) => {
             
             <div className="product-image-modal-gallery">
               <img
-                src={currentImage ? `/uploads/${currentImage}` : '/placeholder-printer.jpg'}
+                src={currentImage ? currentImage : '/placeholder-printer.jpg'}
                 alt={`${productName} - Image ${currentImageIndex + 1}`}
                 className="product-image-modal-image"
                 onError={(e) => {

@@ -828,7 +828,7 @@ const AdminPanel = () => {
                         {existingImages.map((img, index) => (
                           <div key={img.id} className="relative group">
                             <img
-                              src={`/uploads/${img.imagepath}`}
+                              src={img.imagepath}
                               alt={`Existing image ${index + 1}`}
                               className="w-16 h-16 object-cover rounded border"
                               onError={(e) => {

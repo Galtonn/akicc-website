@@ -67,7 +67,7 @@ export const ProductCard = ({ product }) => {
       {/* Image */}
       <div className="product-image-container">
         <img
-          src={product.image ? `/uploads/${product.image}` : '/placeholder-printer.jpg'}
+          src={product.image ? product.image : '/placeholder-printer.jpg'}
           alt={product.name}
           className="product-image"
           style={{ imageRendering: 'high-quality' }}
